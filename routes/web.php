@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return \Queue::size('redis');
-    // return view('welcome');
+   // return \Queue::getRedis()->zrange('queues:default' ,0, -1);
+    return view('welcome');
 });
