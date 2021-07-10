@@ -17,6 +17,7 @@ use Throwable;
 use Illuminate\Support\Facades\Schema;
 use App\Models\WebsiteList;
 use \Log;
+use Illuminate\Support\Facades\Redis;
 class PostMQJob implements ShouldQueue
 {
 	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -127,7 +128,7 @@ class PostMQJob implements ShouldQueue
 		// 	"issue_detail" => "Send data " . $article->create_date . " " . $content["title"],
 		// 	"postmq_at" => now()->format("Y-m-d H:i:s"),
 		// ]);
-        \Redis::connection('redis')->set($list->id.':postmq_at', now()->format("Y-m-d H:i:s"));
+        Redis::set($list->id.':postmq_at', now()->format("Y-m-d H:i:s"));
 		Log::debug("[" . $web->domain . "] " . $article->create_date . " | " . $article->title);
 	}
 
