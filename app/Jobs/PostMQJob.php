@@ -114,17 +114,17 @@ class PostMQJob implements ShouldQueue
 		if ($debug) {
 		} else {
 			$rest = \Queue::connection("datamq")->pushRaw($payload, "ScrapingPosts");
-			DB::connection("scrapy")
-				->table($table)
-				->where("cid", $article->cid)
-				->update([
-					"is_transfer" => 1,
-					"is_updated" => 0,
-				]);
+			// DB::connection("scrapy")
+			// 	->table($table)
+			// 	->where("cid", $article->cid)
+			// 	->update([
+			// 		"is_transfer" => 1,
+			// 		"is_updated" => 0,
+			// 	]);
 		}
 		$list->update([
 			// "service_status" => "sending",
-			"issue_detail" => "Sending data " . $article->create_date . " " . $content["title"],
+			"issue_detail" => "Send data " . $article->create_date . " " . $content["title"],
 			"postmq_at" => now()->format("Y-m-d H:i:s"),
 		]);
 		Log::debug("[" . $web->domain . "] " . $article->create_date . " | " . $article->title);
