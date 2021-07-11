@@ -85,6 +85,7 @@ return [
 
     'waits' => [
         'redis:default' => 60,
+        'datamq:ErrorScrapingPosts' => 60,
     ],
 
     /*
@@ -174,6 +175,15 @@ return [
             'tries' => 1,
             'nice' => 0,
         ],
+        'ErrorScrapingPosts' => [
+            'connection' => 'datamq',
+            'queue' => ['ErrorScrapingPosts'],
+            'balance' => 'auto',
+            'maxProcesses' => 15,
+            'memory' => 128,
+            'tries' => 1,
+            'nice' => 0,
+        ]
     ],
 
     'environments' => [
@@ -188,6 +198,9 @@ return [
         'local' => [
             'supervisor-1' => [
                 'maxProcesses' => 25,
+            ],
+            'ErrorScrapingPosts' => [
+                'maxProcesses' => 1,
             ],
         ],
     ],

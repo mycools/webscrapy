@@ -61,6 +61,12 @@ class PostMQJob implements ShouldQueue
 		}
         $article->content = $this->textFilter($article->content);
 		$article->title = $this->textFilter($article->title);
+        $article->update([
+			"title" => $article->title,
+			"content" => $article->content,
+			"is_transfer" => 1,
+			"is_updated" => 0,
+		]);
 		if (is_numeric($article->title)) {
 			Log::debug("[" . $article->website_domain . "]" . $article->title . " is not of type 'string");
 			return 0;

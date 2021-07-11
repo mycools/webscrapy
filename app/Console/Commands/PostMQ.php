@@ -77,6 +77,7 @@ class PostMQ extends Command
 		$this->info("PostMQ : " . $table);
 		DB::connection("scrapy")
 			->table($table)
+            ->where("is_updated", "1")
 			->orderBy("cid")
 			->chunk(30, function ($articles) use ($table, $web, $debug, $list) {
 				foreach ($articles as $article) {
