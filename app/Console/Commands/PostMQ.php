@@ -82,7 +82,7 @@ class PostMQ extends Command
 			->chunk(30, function ($articles) use ($table, $web, $debug, $list) {
 				foreach ($articles as $article) {
 					// $article->content = $this->textFilter($article->content);
-					$this->info($web->domain . " | " . $article->create_date . " | " . $article->title);
+					$this->info($web->domain . " | " . $article->create_date . " | " . $article->title . " | " . $article->permalink);
 
 					// printf("%s\n", $article->content);
 					PostMQJob::dispatch($table, $web, $list, $article, $debug);
