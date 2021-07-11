@@ -53,13 +53,8 @@ class PostMQJob implements ShouldQueue
 		$debug = $this->debug;
 		$list = $this->weblist;
 		$article = $this->article;
-		if (trim($article->content) && trim($article->title)) {
-			if (strpos(trim($article->content), trim($article->title)) === 0) {
-				//$article->content = mb_substr(trim($article->content), strlen(trim($article->title)));
-			}
-			$article->content = $this->textFilter($article->content);
-		}
-        $article->content = $this->textFilter($article->content);
+
+		$article->content = $this->textFilter($article->content);
 		$article->title = $this->textFilter($article->title);
 
 		if (is_numeric($article->title)) {
@@ -91,7 +86,7 @@ class PostMQJob implements ShouldQueue
 				$article->create_date = now()->format("Y-m-d H:i:s");
 			}
 		}
-        // print($article->content . "\n");
+		// print($article->content . "\n");
 		$content = [
 			"uid" => (string) Str::uuid(),
 			"title" => $article->title,
@@ -120,19 +115,19 @@ class PostMQJob implements ShouldQueue
 				->table($table)
 				->where("cid", $article->cid)
 				->update([
-                    "title" => $article->title,
-                    "content" => $article->content,
+					"title" => $article->title,
+					"content" => $article->content,
 					"is_transfer" => 1,
 					"is_updated" => 0,
 				]);
 		}
+		Redis::set($list->id . ":postmq_at", now()->format("Y-m-d H:i:s"));
 		// $list->update([
-		// 	"service_status" => "sending",
-		// 	"issue_detail" => "Send data " . $article->create_date . " " . $content["title"],
+		// 	// "service_status" => "sending",
+		// 	"issue_detail" => "Sending data " . $article->create_date . " " . $content["title"],
 		// 	"postmq_at" => now()->format("Y-m-d H:i:s"),
 		// ]);
-        Redis::set($list->id.':postmq_at', now()->format("Y-m-d H:i:s"));
-		Log::debug("[" . $web->domain . "] " . $article->create_date . " | " . $article->title);
+		Log::debug("[" . $web->domain . "] " . $article->create_date . " | " . $article->content);
 	}
 
 	public function textFilter($input_lines)
